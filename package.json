@@ -1,0 +1,32 @@
+{
+  "name": "mercadolibre-playwright-e2e-automation",
+  "version": "0.1.0",
+  "description": "End-to-end automation framework for MercadoLibre Argentina using Playwright and TypeScript.",
+  "type": "module",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "report": "playwright show-report",
+    "lint": "eslint .",
+    "format": "prettier --write ."
+  },
+  "keywords": [
+    "playwright",
+    "e2e",
+    "automation",
+    "testing",
+    "mercadolibre",
+    "typescript",
+    "qa"
+  ],
+  "author": "Ernesto Albarez",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.57.0",
+    "@types/node": "^25.0.9"
+  }
+}
