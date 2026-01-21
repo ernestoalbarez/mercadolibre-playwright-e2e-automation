@@ -9,7 +9,7 @@
     "test:debug": "playwright test --debug",
     "report": "playwright show-report",
     "prepare": "husky install",
-    "lint": "eslint . --ext .ts,.tsx",
+    "lint": "eslint .",
     "format": "prettier --write ."
   },
   "keywords": [
@@ -33,9 +33,19 @@
     "@typescript-eslint/parser": "^8.53.1",
     "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
+    "eslint-define-config": "^2.1.0",
     "eslint-plugin-playwright": "^2.5.0",
     "husky": "^8.0.0",
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.0"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "dependencies": {
+    "dotenv": "^17.2.3"
   }
 }

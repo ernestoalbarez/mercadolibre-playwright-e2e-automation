@@ -1,4 +1,8 @@
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+import path from 'path';
+
+dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 export default defineConfig({
   testDir: './tests/e2e',
@@ -10,7 +14,7 @@ export default defineConfig({
   workers: 2,
   reporter: [['html', { open: 'never' }]],
   use: {
-    baseURL: 'https://www.mercadolibre.com.ar',
+    baseURL: process.env.BASE_URL,
     headless: true,
     viewport: { width: 1366, height: 768 },
     actionTimeout: 10 * 1000,
