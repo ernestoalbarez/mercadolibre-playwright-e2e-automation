@@ -5,13 +5,13 @@ test.describe('MercadoLibre - Search flow', () => {
     await page.goto('/');
 
     // Aceptar cookies si aparece
-    const acceptCookies = page.getByRole('button', { name: /aceptar/i });
+    const acceptCookies = page.locator('data-testid="action:understood-button"');
     if (await acceptCookies.isVisible()) {
       await acceptCookies.click();
     }
 
     // Buscar un producto
-    const searchInput = page.getByRole('textbox', { name: /buscar/i });
+    const searchInput = page.locator('input.nav-search-input');
     await searchInput.fill('iphone');
     await searchInput.press('Enter');
 
