@@ -4,14 +4,9 @@ import playwrightPlugin from 'eslint-plugin-playwright';
 
 export default [
   {
-    ignores: [
-      'node_modules/**',
-      'dist/**',
-      'playwright-report/**',
-      'test-results/**'
-    ],
+    ignores: ['node_modules/**', 'dist/**', 'playwright-report/**', 'test-results/**'],
   },
-    {
+  {
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     languageOptions: {
       parser: tsParser,
@@ -28,7 +23,7 @@ export default [
     },
     plugins: {
       '@typescript-eslint': tsPlugin,
-      'playwright': playwrightPlugin,
+      playwright: playwrightPlugin,
     },
     rules: {
       ...tsPlugin.configs.recommended.rules,
@@ -36,7 +31,7 @@ export default [
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'off',
       ...playwrightPlugin.configs.recommended.rules,
-      'playwright/no-skipped-test': 'warn',      
+      'playwright/no-skipped-test': 'warn',
       'no-undef': 'error',
       'playwright/expect-expect': 'off',
       'jest/expect-expect': 'off',
