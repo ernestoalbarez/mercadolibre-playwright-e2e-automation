@@ -1,7 +1,8 @@
-# Playwright TypeScript Automation Framework Skeleton
+# MercadoLibre Playwright E2E Automation Framework
 
-This repository serves as a **base skeleton for end-to-end (E2E) automation** with Playwright and TypeScript.  
-It provides a clean, professional setup for creating maintainable automation projects.
+End-to-end automation framework for **MercadoLibre Argentina** built with **Playwright** and **TypeScript**.
+
+This project is designed as a scalable, maintainable, and automation-first testing framework, following modern QA / SDET best practices.
 
 ---
 
@@ -17,6 +18,7 @@ It provides a clean, professional setup for creating maintainable automation pro
 ---
 
 ## Folder Structure
+
 ```
 tests/e2e/       # Your E2E test files
 pages/           # Page Object Models
@@ -37,7 +39,8 @@ npm install
 npx playwright install
 ```
 
-3.	Verify setup by running a test (if any exist):
+3. Verify setup by running a test (if any exist):
+
 ```basb
 npm test
 ```
@@ -45,6 +48,7 @@ npm test
 ---
 
 ## Scripts
+
 - npm run lint → Runs ESLint on all TypeScript files
 - npm run format → Formats files using Prettier
 - npm test → Runs Playwright tests
@@ -53,15 +57,17 @@ npm test
 ---
 
 ## Usage
-1.	Add your tests in tests/e2e/
-2.	Add Page Objects in pages/
-3.	Add helpers in utils/ and fixtures in fixtures/
-4.	Run npm run lint and npm run format to keep code clean
-5.	Commit changes; Husky + lint-staged will enforce code quality
+
+1. Add your tests in tests/e2e/
+2. Add Page Objects in pages/
+3. Add helpers in utils/ and fixtures in fixtures/
+4. Run npm run lint and npm run format to keep code clean
+5. Commit changes; Husky + lint-staged will enforce code quality
 
 ---
 
 ## Notes
+
 - playwright-report/ and dist/ are ignored by ESLint to prevent analyzing generated files
 - This skeleton is meant to be reused as a template for any future Playwright + TypeScript project
 - Extend and customize rules in eslint.config.js as needed for your project
