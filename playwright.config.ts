@@ -22,6 +22,7 @@ export default defineConfig({
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
     trace: 'on-first-retry',
+    launchOptions: { slowMo: 200 },
   },
   projects: [
     {
