@@ -12,7 +12,6 @@ export class SearchResultsPage extends BasePage {
 
   /**
    * Verifies that at least the first result item is visible on the page.
-   * @returns A promise that resolves when the first result is visible.
    */
   async expectResultsToBeVisible(): Promise<void> {
     await expect(this.locators.resultsItems.first()).toBeVisible({ timeout: 10000 });
@@ -81,5 +80,20 @@ export class SearchResultsPage extends BasePage {
       expect(price).toBeGreaterThanOrEqual(min);
       expect(price).toBeLessThanOrEqual(max);
     }
+  }
+
+  /**
+   * Activate the Free Shipping filter.
+   * If already active, does nothing.
+   */
+  async checkFreeShipping(): Promise<void> {
+    await this.locators.freeShippingSwitch.check();
+  }
+
+  /**
+   * Validates that the Free Shipping switch is checked.
+   */
+  async expectFreeShippingIsChecked(): Promise<void> {
+    await expect(this.locators.freeShippingSwitch).toBeChecked();
   }
 }

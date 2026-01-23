@@ -100,6 +100,13 @@ export class SearchResultsLocators {
     return this.page.locator('.ui-search-sort-filter button');
   }
 
+  /**
+   * @returns Locator for the free shipping switch option.
+   */
+  get freeShippingSwitch(): Locator {
+    return this.page.locator('input#shipping_cost_highlighted_free');
+  }
+
   // Applied filter tags
 
   /**
