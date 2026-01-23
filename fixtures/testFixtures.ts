@@ -9,9 +9,13 @@ type PagesFixture = {
 
 export const test = base.extend<PagesFixture>({
   homePage: async ({ page }, use) => {
-    await use(new HomePage(page));
+    const homePage = new HomePage(page);
+    await homePage.open();
+    await use(homePage);
   },
+  //searchResultsPage: async ({ page, homePage }, use) => {
   searchResultsPage: async ({ page }, use) => {
+    // void homePage;
     await use(new SearchResultsPage(page));
   },
 });
