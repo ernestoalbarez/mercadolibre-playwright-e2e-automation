@@ -77,9 +77,7 @@ This structure reduces flakiness and makes UI changes easier to maintain.
 
 ```ts
 test('Search for a product', async ({ homePage, searchResultsPage }) => {
-  await homePage.open();
   await homePage.searchFor('iPhone');
-
   await searchResultsPage.expectResultsToBeVisible();
 });
 ```
