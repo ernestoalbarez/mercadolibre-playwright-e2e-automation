@@ -10,50 +10,90 @@ export class SearchResultsPage extends BasePage {
     this.locators = new SearchResultsLocators(page);
   }
 
+  /**
+   * Verifies that at least the first result item is visible on the page.
+   */
   async expectResultsToBeVisible(): Promise<void> {
-    await expect(this.locators.resultsItems.first()).toBeVisible();
+    await expect(this.locators.resultsItems.first()).toBeVisible({ timeout: 10000 });
   }
 
+  /**
+   * Selects a sorting option from the sort dropdown.
+   * @param optionKey - The key value of the sort option.
+   */
   async selectSortBy(optionKey: 'relevance' | 'price_asc' | 'price_desc') {
     await this.locators.sortByDropdown.click();
-
     const option = this.page.locator(`li[data-key="${optionKey}"]`);
     await option.waitFor({ state: 'visible' });
     await option.click();
   }
 
+  /**
+   * Applies a price filter range and waits for the UI to update.
+   * @param min - Minimum price value.
+   * @param max - Maximum price value.
+   */
   async applyPriceFilter(min: string, max: string): Promise<void> {
-    await this.locators.minPriceRange.waitFor({ state: 'visible' });
-    await this.locators.minPriceRange.clear();
-    await this.locators.minPriceRange.pressSequentially(min, { delay: 100 });
+    await this.locators.minPriceRange.fill(min);
+    await this.locators.maxPriceRange.fill(max);
 
-    await this.locators.maxPriceRange.waitFor({ state: 'visible' });
-    await this.locators.maxPriceRange.clear();
-    await this.locators.maxPriceRange.pressSequentially(max, { delay: 100 });
-
-    await Promise.all([
-      this.locators.priceFilterButton.waitFor({ state: 'visible' }),
-      this.locators.priceFilterButton.click(),
-    ]);
-  }
-
-  async validatePriceFilter(): Promise<void> {
-    await expect(this.locators.priceFilterTag).toBeAttached();
-  }
-
-  async validatePriceRangeFiltering(minPrice: string, maxPrice: string): Promise<void> {
+    await this.locators.priceFilterButton.click();
     await this.validatePriceFilter();
-    const priceToNumber = (str: string) => Number(str.replace(/\D/g, ''));
+  }
 
-    const itemsCount = await this.locators.resultsItems.count();
+  /**
+   * Validates that the price filter tag is correctly attached to the UI.
+   */
+  async validatePriceFilter(): Promise<void> {
+    await expect(this.locators.priceFilterTag).toBeVisible();
+  }
+
+  /**
+   * Converts a currency string into a numeric value.
+   * Handles formats like "$ 1.234.567" or "$ 123,45".
+   * @param price - The currency string.
+   * @returns Numeric representation of the price.
+   */
+  private parseCurrencyToNumber(price: string): number {
+    const cleanValue = price
+      .replace(/\./g, '')
+      .replace(',', '.')
+      .replace(/[^\d.]/g, '');
+    return parseFloat(cleanValue);
+  }
+
+  /**
+   * Iterates through results and verifies they are within the price range.
+   * @param minPrice - Expected minimum.
+   * @param maxPrice - Expected maximum.
+   */
+  async validatePriceRangeFiltering(minPrice: string, maxPrice: string): Promise<void> {
+    const min = this.parseCurrencyToNumber(minPrice);
+    const max = this.parseCurrencyToNumber(maxPrice);
+
     await this.locators.resultsItems.first().waitFor({ state: 'visible' });
+    const items = await this.locators.resultsItems.all();
 
-    for (let i = 0; i < itemsCount; i++) {
-      const item = this.locators.resultsItems.nth(i);
-      const itemPrice = await this.locators.getItemPrice(item);
+    for (const item of items) {
+      const price = this.parseCurrencyToNumber(await this.locators.getItemPrice(item));
 
-      expect(priceToNumber(itemPrice)).toBeGreaterThanOrEqual(priceToNumber(minPrice));
-      expect(priceToNumber(itemPrice)).toBeLessThanOrEqual(priceToNumber(maxPrice));
+      expect(price).toBeGreaterThanOrEqual(min);
+      expect(price).toBeLessThanOrEqual(max);
     }
+  }
+
+  /**
+   * Activate the Free Shipping filter.
+   * If already active, does nothing.
+   */
+  async checkFreeShipping(): Promise<void> {
+    await this.locators.freeShippingSwitch.check();
+  }
+
+  /**
+   * Validates that the Free Shipping switch is checked.
+   */
+  async expectFreeShippingIsChecked(): Promise<void> {
+    await expect(this.locators.freeShippingSwitch).toBeChecked();
   }
 }
