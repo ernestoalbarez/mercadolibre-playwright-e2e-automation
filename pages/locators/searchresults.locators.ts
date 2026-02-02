@@ -1,5 +1,13 @@
 import { Page, Locator } from '@playwright/test';
 
+const SORT_OPTIONS = {
+  relevance: 'relevance',
+  price_asc: 'price_asc',
+  price_desc: 'price_desc',
+} as const;
+
+export type SortOption = keyof typeof SORT_OPTIONS;
+
 export class SearchResultsLocators {
   private readonly page: Page;
 
@@ -98,6 +106,18 @@ export class SearchResultsLocators {
    */
   get sortByDropdown(): Locator {
     return this.page.locator('.ui-search-sort-filter button');
+  }
+
+  /**
+   * @returns Locator for the sort by dopdown.
+   * @param option - The dropdown sort option.
+   */
+  getSortOption(option: SortOption): Locator {
+    if (!SORT_OPTIONS[option]) {
+      throw new Error(`Unsupported sort option: ${option}`);
+    }
+
+    return this.page.locator(`li[data-key="${SORT_OPTIONS[option]}"]`);
   }
 
   /**
