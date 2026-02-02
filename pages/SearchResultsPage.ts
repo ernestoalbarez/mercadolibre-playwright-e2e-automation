@@ -1,6 +1,6 @@
 import { Page, expect } from '@playwright/test';
 import { BasePage } from './BasePage';
-import { SearchResultsLocators } from './locators/searchresults.locators';
+import { SearchResultsLocators, SortOption } from './locators/searchresults.locators';
 
 export class SearchResultsPage extends BasePage {
   private readonly locators: SearchResultsLocators;
@@ -18,14 +18,59 @@ export class SearchResultsPage extends BasePage {
   }
 
   /**
-   * Selects a sorting option from the sort dropdown.
-   * @param optionKey - The key value of the sort option.
+   * Clicks on a result card by index and navigates to the Product Detail Page (PDP).
+   * @param index - Zero-based index of the result card to open.
    */
-  async selectSortBy(optionKey: 'relevance' | 'price_asc' | 'price_desc') {
+  async openResultByIndex(index: number = 0): Promise<void> {
+    const item = this.locators.resultsItems.nth(index);
+
+    await item.waitFor({ state: 'visible' });
+    await item.click();
+  }
+
+  async clickFirstResult(): Promise<void> {
+    await this.openResultByIndex(0);
+  }
+
+  /**
+   * Selects a sorting option from the sort dropdown.
+   * Validates that the provided option is supported by the page.
+   *
+   * @param optionKey - Supported sort option key.
+   */
+  async selectSortBy(optionKey: SortOption): Promise<void> {
+    await super.handleThirdPartyOverlays();
     await this.locators.sortByDropdown.click();
-    const option = this.page.locator(`li[data-key="${optionKey}"]`);
+
+    const option = this.locators.getSortOption(optionKey);
     await option.waitFor({ state: 'visible' });
     await option.click();
+  }
+
+  /**
+   * Validates that results show a sorting trend by price
+   * (not strict ordering, to avoid flakiness due to ads or mixed results).
+   * @param direction - Sorting direction to validate.
+   */
+  async expectResultsToBeSortedByPrice(direction: 'asc' | 'desc'): Promise<void> {
+    await this.locators.resultsItems.first().waitFor({ state: 'visible' });
+
+    const items = (await this.locators.resultsItems.all()).slice(0, 5);
+    const prices: number[] = [];
+
+    for (const item of items) {
+      const priceText = await this.locators.getItemPrice(item);
+      prices.push(this.parseCurrencyToNumber(priceText));
+    }
+
+    const firstPrice = prices[0];
+    const lastPrice = prices[prices.length - 1];
+
+    if (direction === 'asc') {
+      expect(firstPrice).toBeLessThanOrEqual(lastPrice);
+    } else {
+      expect(firstPrice).toBeGreaterThanOrEqual(lastPrice);
+    }
   }
 
   /**
