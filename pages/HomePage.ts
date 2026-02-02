@@ -54,4 +54,11 @@ export class HomePage extends BasePage {
   async openCart(): Promise<void> {
     await this.locators.cartButton.click();
   }
+
+  /**
+   * Opens the login page from the home page header.
+   */
+  async openLogin(): Promise<void> {
+    await this.locators.loginButton.click();
+  }
 }
