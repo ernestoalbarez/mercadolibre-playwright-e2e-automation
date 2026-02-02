@@ -20,7 +20,7 @@ test.describe('MercadoLibre - Add product to cart flow', () => {
     await homePage.searchFor(searchTerm);
 
     await searchResultsPage.expectResultsToBeVisible();
-    await searchResultsPage.openResultByIndex(0);
+    await searchResultsPage.clickFirstResult();
 
     await pdpPage.expectProductDetailsToBeVisible();
     const productName = await pdpPage.getProductTitle();

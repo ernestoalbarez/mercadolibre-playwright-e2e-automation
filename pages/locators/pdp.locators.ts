@@ -50,4 +50,42 @@ export class PdpLocators {
   getActionButton(action: ProductAction): Locator {
     return this.page.locator(`button[formaction*="${PRODUCT_ACTIONS[action]}"]`);
   }
+
+  /**
+   * Root locator for PDP variation groups.
+   */
+  get variationPickers(): Locator {
+    return this.page.locator('.ui-pdp-outside_variations__picker');
+  }
+
+  /**
+   * Generic locator for all variation option items.
+   */
+  get variationOptions(): Locator {
+    return this.page.locator('[data-testid="thumbnail-item"]');
+  }
+
+  /**
+   * Returns a locator for a PDP variant option matched by visible text.
+   * Prefer `variationOptionByUrlFragment` when stability is critical.
+   *
+   * @param label - Visible label of the variant option (e.g. "256 GB", "Negro")
+   */
+  variationOptionByLabel(label: string): Locator {
+    return this.page.locator('[data-testid="thumbnail-item"]', {
+      hasText: label,
+    });
+  }
+
+  /**
+   * Returns a locator for a PDP variant option identified by a URL fragment.
+   *
+   * MercadoLibre performs a full navigation when a variant is selected,
+   * so the href attribute is a stable and reliable selector.
+   *
+   * @param urlFragment - Partial URL that uniquely identifies the variant
+   */
+  variationOptionByUrlFragment(urlFragment: string): Locator {
+    return this.page.locator(`[data-testid="thumbnail-item"][href*="${urlFragment}"]`);
+  }
 }

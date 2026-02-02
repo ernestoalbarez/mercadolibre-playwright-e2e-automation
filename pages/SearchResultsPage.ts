@@ -28,6 +28,10 @@ export class SearchResultsPage extends BasePage {
     await item.click();
   }
 
+  async clickFirstResult(): Promise<void> {
+    await this.openResultByIndex(0);
+  }
+
   /**
    * Selects a sorting option from the sort dropdown.
    * Validates that the provided option is supported by the page.
