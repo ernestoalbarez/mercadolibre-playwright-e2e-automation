@@ -18,6 +18,17 @@ export class SearchResultsPage extends BasePage {
   }
 
   /**
+   * Clicks on a result card by index and navigates to the Product Detail Page (PDP).
+   * @param index - Zero-based index of the result card to open.
+   */
+  async openResultByIndex(index: number = 0): Promise<void> {
+    const item = this.locators.resultsItems.nth(index);
+
+    await item.waitFor({ state: 'visible' });
+    await item.click();
+  }
+
+  /**
    * Selects a sorting option from the sort dropdown.
    * Validates that the provided option is supported by the page.
    *
