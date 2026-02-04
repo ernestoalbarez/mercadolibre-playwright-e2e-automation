@@ -1,14 +1,17 @@
 import { test } from '../../fixtures/testFixtures';
-import mockSearch from '../mocks/search.mock.json';
+import mockSearch from '../mocks/search.mock.json' assert { type: 'json' };
+import { buildSearchHtmlFromMock } from '../../utils/mockData';
 
 test('should render mocked search results', async ({ page, homePage, searchResultsPage }) => {
-  await page.route('**/sites/MLA/search**', (route) =>
-    route.fulfill({
+  const mockedSearchHtml = buildSearchHtmlFromMock(mockSearch, 3);
+
+  await page.route('**/listado.mercadolibre.com.ar/*', async (route) => {
+    await route.fulfill({
       status: 200,
-      contentType: 'application/json',
-      body: JSON.stringify(mockSearch),
-    })
-  );
+      contentType: 'text/html',
+      body: mockedSearchHtml,
+    });
+  });
 
   await homePage.searchFor('macbook');
 
