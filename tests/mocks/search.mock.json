@@ -1,0 +1,19 @@
+{
+  "results": [
+    {
+      "id": "MOCK-MLA-1",
+      "title": "Mock MacBook Air M1 256GB",
+      "price": 999999
+    },
+    {
+      "id": "MOCK-MLA-2",
+      "title": "Mock MacBook Pro M2 512GB",
+      "price": 1499999
+    },
+    {
+      "id": "MOCK-MLA-3",
+      "title": "Mock MacBook Pro M3 1TB",
+      "price": 1999999
+    }
+  ]
+}
