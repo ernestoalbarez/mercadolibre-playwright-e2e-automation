@@ -19,14 +19,28 @@ export class HomeLocators {
    * Cookie consent accept button displayed on first visit.
    */
   get acceptCookiesButton(): Locator {
-    return this.page.locator('[data-testid="action:understood-button"]');
+    return this.page.getByTestId('action:understood-button');
   }
 
   /**
    * Global search input located in the home page header.
    */
   get searchInput(): Locator {
-    return this.page.locator('input.nav-search-input');
+    return this.page.getByRole('combobox', { name: /buscar/i });
+  }
+
+  /**
+   * Shopping cart button located in the top navigation bar.
+   */
+  get cartButton(): Locator {
+    return this.page.getByRole('link', { name: /carrito/i });
+  }
+
+  /**
+   * Login button located in the top navigation bar.
+   */
+  get loginButton(): Locator {
+    return this.page.getByRole('link', { name: /ingresá/i });
   }
 
   /**

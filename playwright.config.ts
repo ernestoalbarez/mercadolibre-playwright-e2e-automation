@@ -10,21 +10,19 @@ export default defineConfig({
   expect: {
     timeout: 5 * 1000,
   },
-  retries: 1,
-  workers: 2,
-  reporter: [['html', { open: 'never' }]],
+  retries: process.env.CI ? 2 : 1,
+  workers: process.env.CI ? 1 : undefined,
+  reporter: [['html', { open: 'never' }], ['list']],
   use: {
     baseURL: process.env.BASE_URL,
     headless: true,
-    storageState: undefined,
-    permissions: [],
     viewport: { width: 1280, height: 720 },
     actionTimeout: 10 * 1000,
     navigationTimeout: 20 * 1000,
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
-    trace: 'on-first-retry',
-    launchOptions: { slowMo: 200 },
+    trace: 'retain-on-failure',
+    launchOptions: {},
   },
   projects: [
     {
