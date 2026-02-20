@@ -56,4 +56,18 @@ export class HomeLocators {
   get loginButton(): Locator {
     return this.page.locator('[data-link-id="login"]');
   }
+
+  /**
+   * Shopping cart button located in the top navigation bar.
+   */
+  get cartButton(): Locator {
+    return this.page.locator('#nav-cart');
+  }
+
+  /**
+   * Login button located in the top navigation bar.
+   */
+  get loginButton(): Locator {
+    return this.page.locator('[data-link-id="login"]');
+  }
 }
