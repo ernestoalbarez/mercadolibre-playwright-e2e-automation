@@ -1,5 +1,5 @@
 import { test } from '../../fixtures/testFixtures';
-import mockSearch from '../mocks/search.mock.json' assert { type: 'json' };
+import mockSearch from '../mocks/search.mock.json';
 import { buildSearchHtmlFromMock } from '../../utils/mockData';
 
 test('should render mocked search results', async ({ page, homePage, searchResultsPage }) => {

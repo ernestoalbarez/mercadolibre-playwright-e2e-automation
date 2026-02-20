@@ -44,7 +44,7 @@ jobs:
     - name: Run Playwright tests
       run: npm test
       env:
-        BASE_URL: ${{ secrets.BASE_URL || 'https://www.mercadolibre.com.ar' }}
+        BASE_URL: ${{ secrets.BASE_URL }}
 
     - uses: actions/upload-artifact@v4
       if: always()

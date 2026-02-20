@@ -4,6 +4,10 @@ import path from 'path';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
+if (!process.env.BASE_URL) {
+  throw new Error('BASE_URL is not defined');
+}
+
 export default defineConfig({
   testDir: './tests/e2e',
   timeout: 30 * 1000,

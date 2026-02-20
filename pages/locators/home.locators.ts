@@ -26,21 +26,7 @@ export class HomeLocators {
    * Global search input located in the home page header.
    */
   get searchInput(): Locator {
-    return this.page.getByRole('combobox', { name: /buscar/i });
-  }
-
-  /**
-   * Shopping cart button located in the top navigation bar.
-   */
-  get cartButton(): Locator {
-    return this.page.getByRole('link', { name: /carrito/i });
-  }
-
-  /**
-   * Login button located in the top navigation bar.
-   */
-  get loginButton(): Locator {
-    return this.page.getByRole('link', { name: /ingresá/i });
+    return this.page.locator('.nav-search .nav-search-input');
   }
 
   /**
@@ -54,20 +40,6 @@ export class HomeLocators {
    * Login button located in the top navigation bar.
    */
   get loginButton(): Locator {
-    return this.page.locator('[data-link-id="login"]');
-  }
-
-  /**
-   * Shopping cart button located in the top navigation bar.
-   */
-  get cartButton(): Locator {
-    return this.page.locator('#nav-cart');
-  }
-
-  /**
-   * Login button located in the top navigation bar.
-   */
-  get loginButton(): Locator {
-    return this.page.locator('[data-link-id="login"]');
+    return this.page.locator('.user-menu-guest-item [data-link-id="login"]');
   }
 }

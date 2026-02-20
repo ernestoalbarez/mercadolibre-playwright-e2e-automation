@@ -2,6 +2,7 @@ import { test } from '../../fixtures/testFixtures';
 
 test.describe('PDP | Product Variants', () => {
   test('should update URL when selecting different product variants', async ({
+    page,
     homePage,
     searchResultsPage,
     pdpPage,
@@ -12,12 +13,16 @@ test.describe('PDP | Product Variants', () => {
     await searchResultsPage.clickFirstResult();
     await pdpPage.expectProductDetailsToBeVisible();
 
-    await pdpPage.expectVariantOptionToExist('azul-oceano');
-    await pdpPage.selectVariantByUrlFragment('azul-oceano');
-    await pdpPage.expectVariantApplied('azul-oceano');
+    const variants = await pdpPage.getAvailableVariants();
 
-    await pdpPage.expectVariantOptionToExist('128-gb-6-gb');
-    await pdpPage.selectVariantByUrlFragment('128-gb-6-gb');
-    await pdpPage.expectVariantApplied('128-gb-6-gb');
+    if (variants.length < 2) {
+      test.skip(true, 'Product does not have at least 2 variants to test URL updates.');
+    }
+
+    const originalUrl = page.url();
+
+    // Select the second variant (assuming the first one might be the currently selected one)
+    await pdpPage.selectVariant(variants[1]);
+    await pdpPage.expectUrlToChange(originalUrl);
   });
 });

@@ -14,6 +14,18 @@ type PagesFixture = {
 };
 
 export const test = base.extend<PagesFixture>({
+  page: async ({ page }, use) => {
+    // Block Google One Tap / Sign-in as it often overlays and intercepts clicks in production
+    // We use a "soft block" (fulfill with empty response) to avoid browser stalls (especially in Webkit)
+    await page.route('**://accounts.google.com/gsi/**', (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: 'text/javascript',
+        body: '// Soft-blocked by QA Automation',
+      })
+    );
+    await use(page);
+  },
   homePage: async ({ page }, use) => {
     const homePage = new HomePage(page);
     await homePage.open();

@@ -136,4 +136,37 @@ export class PdpPage extends BasePage {
   async expectVariantOptionToExist(urlFragment: string): Promise<void> {
     await expect(this.locators.variationOptionByUrlFragment(urlFragment)).toHaveCount(1);
   }
+
+  /**
+   * Retrieves all available product variation options on the PDP.
+   *
+   * @returns An array of Locators for each variation option.
+   */
+  async getAvailableVariants(): Promise<import('@playwright/test').Locator[]> {
+    await this.locators.variationOptions.first().waitFor({ state: 'visible' });
+    return await this.locators.variationOptions.all();
+  }
+
+  /**
+   * Selects a product variant by its Locator and waits for the resulting navigation.
+   *
+   * @param option - The Locator of the variant option to select.
+   */
+  async selectVariant(option: import('@playwright/test').Locator): Promise<void> {
+    const currentUrl = this.page.url();
+    await this.handleThirdPartyOverlays();
+    await option.click();
+
+    // MercadoLibre performs a full page load on variant change
+    await this.page.waitForURL((url) => url.toString() !== currentUrl);
+  }
+
+  /**
+   * Asserts that the current URL is different from the provided original URL.
+   *
+   * @param originalUrl - The URL before the action.
+   */
+  async expectUrlToChange(originalUrl: string): Promise<void> {
+    await expect(this.page).not.toHaveURL(originalUrl);
+  }
 }

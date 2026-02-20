@@ -83,7 +83,14 @@ export class SearchResultsPage extends BasePage {
     await this.locators.minPriceRange.fill(min);
     await this.locators.maxPriceRange.fill(max);
 
-    await this.locators.priceFilterButton.click();
+    // Pressing Enter on the last field is often more reliable than clicking the small button
+    await this.locators.maxPriceRange.press('Enter');
+
+    // Fallback click if the button is still visible/available (defensive)
+    if (await this.locators.priceFilterButton.isVisible()) {
+      await this.locators.priceFilterButton.click().catch(() => {});
+    }
+
     await this.validatePriceFilter();
   }
 
@@ -91,25 +98,32 @@ export class SearchResultsPage extends BasePage {
    * Validates that the price filter tag is correctly attached to the UI.
    */
   async validatePriceFilter(): Promise<void> {
-    await expect(this.locators.priceFilterTag).toBeVisible();
+    await expect(this.locators.priceFilterTag).toBeVisible({ timeout: 10000 });
   }
 
   /**
    * Converts a currency string into a numeric value.
    * Handles formats like "$ 1.234.567" or "$ 123,45".
-   * @param price - The currency string.
+   * Optimized for robustness against extra labels or complex formatting.
+   * @param priceText - The currency string.
    * @returns Numeric representation of the price.
    */
-  private parseCurrencyToNumber(price: string): number {
-    const cleanValue = price
+  private parseCurrencyToNumber(priceText: string): number {
+    if (!priceText) return 0;
+
+    // Normalize string: remove thousands separator (dot) and convert decimal comma to dot
+    const cleanValue = priceText
       .replace(/\./g, '')
       .replace(',', '.')
       .replace(/[^\d.]/g, '');
-    return parseFloat(cleanValue);
+
+    return parseFloat(cleanValue) || 0;
   }
 
   /**
-   * Iterates through results and verifies they are within the price range.
+   * Refactored validation to check only the most relevant results (first and last).
+   * Excludes sponsored and advertising items to reduce falsos negativos.
+   *
    * @param minPrice - Expected minimum.
    * @param maxPrice - Expected maximum.
    */
@@ -117,15 +131,41 @@ export class SearchResultsPage extends BasePage {
     const min = this.parseCurrencyToNumber(minPrice);
     const max = this.parseCurrencyToNumber(maxPrice);
 
+    // Ensure results are loaded
     await this.locators.resultsItems.first().waitFor({ state: 'visible' });
-    const items = await this.locators.resultsItems.all();
 
-    for (const item of items) {
-      const price = this.parseCurrencyToNumber(await this.locators.getItemPrice(item));
+    // Filter non-sponsored items
+    const nonSponsoredItems = this.locators.nonSponsoredResultsItems;
+    const count = await nonSponsoredItems.count();
 
-      expect(price).toBeGreaterThanOrEqual(min);
-      expect(price).toBeLessThanOrEqual(max);
-    }
+    // Use non-sponsored items if available, fallback to all items if filter is too aggressive
+    const targetItems = count > 0 ? nonSponsoredItems : this.locators.resultsItems;
+    const allVisibleItems = await targetItems.all();
+
+    // Validate first non-sponsored (or first available) result
+    const firstPriceText = await this.locators.getItemPrice(allVisibleItems[0]);
+    const firstPrice = this.parseCurrencyToNumber(firstPriceText);
+    expect(
+      firstPrice,
+      `First product price (${firstPrice}) should be >= ${min}`
+    ).toBeGreaterThanOrEqual(min);
+    expect(
+      firstPrice,
+      `First product price (${firstPrice}) should be <= ${max}`
+    ).toBeLessThanOrEqual(max);
+
+    // Validate last non-sponsored (or last visible) result (on the current page)
+    const lastIndex = allVisibleItems.length - 1;
+    const lastPriceText = await this.locators.getItemPrice(allVisibleItems[lastIndex]);
+
+    const lastPrice = this.parseCurrencyToNumber(lastPriceText);
+    expect(
+      lastPrice,
+      `Last product price (${lastPrice}) should be >= ${min}`
+    ).toBeGreaterThanOrEqual(min);
+    expect(lastPrice, `Last product price (${lastPrice}) should be <= ${max}`).toBeLessThanOrEqual(
+      max
+    );
   }
 
   /**

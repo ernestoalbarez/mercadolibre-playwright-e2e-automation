@@ -23,6 +23,15 @@ export class SearchResultsLocators {
   }
 
   /**
+   * @returns Locator for result items that are not sponsored/advertising.
+   */
+  get nonSponsoredResultsItems(): Locator {
+    return this.resultsItems.filter({
+      hasNot: this.page.locator('.poly-component__advertising'),
+    });
+  }
+
+  /**
    * Extracts the title from a specific item.
    * @param item - The parent item Locator.
    */
