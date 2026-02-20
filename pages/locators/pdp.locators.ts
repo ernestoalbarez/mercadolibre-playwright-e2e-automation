@@ -33,14 +33,14 @@ export class PdpLocators {
    * Locator for the product title displayed on the PDP.
    */
   get productTitle(): Locator {
-    return this.page.locator('h1.ui-pdp-title');
+    return this.page.getByRole('heading', { level: 1 });
   }
 
   /**
    * Locator for the product price displayed on the PDP.
    */
   get productPrice(): Locator {
-    return this.page.locator('.ui-pdp-price__second-line [data-testid="price-part"]');
+    return this.page.getByTestId('price-part').first();
   }
 
   /**

@@ -2,7 +2,6 @@
   "name": "mercadolibre-playwright-e2e-automation",
   "version": "0.1.0",
   "description": "End-to-end automation framework for MercadoLibre Argentina using Playwright and TypeScript.",
-  "type": "module",
   "scripts": {
     "test": "playwright test",
     "test:headed": "playwright test --headed",

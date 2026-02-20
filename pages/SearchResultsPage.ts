@@ -56,12 +56,13 @@ export class SearchResultsPage extends BasePage {
     await this.locators.resultsItems.first().waitFor({ state: 'visible' });
 
     const items = (await this.locators.resultsItems.all()).slice(0, 5);
-    const prices: number[] = [];
 
-    for (const item of items) {
-      const priceText = await this.locators.getItemPrice(item);
-      prices.push(this.parseCurrencyToNumber(priceText));
-    }
+    const prices = await Promise.all(
+      items.map(async (item) => {
+        const priceText = await this.locators.getItemPrice(item);
+        return this.parseCurrencyToNumber(priceText);
+      })
+    );
 
     const firstPrice = prices[0];
     const lastPrice = prices[prices.length - 1];
@@ -125,6 +126,31 @@ export class SearchResultsPage extends BasePage {
       expect(price).toBeGreaterThanOrEqual(min);
       expect(price).toBeLessThanOrEqual(max);
     }
+  }
+
+  /**
+   * Validates the amount of rendered search result items.
+   * @param expectedCount - Expected number of results.
+   */
+  async expectResultsCount(expectedCount: number): Promise<void> {
+    await this.locators.resultsItems.first().waitFor({ state: 'visible' });
+    await expect(this.locators.resultsItems).toHaveCount(expectedCount);
+  }
+
+  /**
+   * Validates that result titles match the expected list (by order).
+   * @param expectedTitles - Array of expected product titles.
+   */
+  async expectResultTitles(expectedTitles: string[]): Promise<void> {
+    await this.locators.resultsItems.first().waitFor({ state: 'visible' });
+
+    const titles = await this.locators.resultsItems.allTextContents();
+
+    expect(titles.length).toBeGreaterThanOrEqual(expectedTitles.length);
+
+    expectedTitles.forEach((expectedTitle, index) => {
+      expect(titles[index]).toContain(expectedTitle);
+    });
   }
 
   /**

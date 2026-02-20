@@ -14,16 +14,16 @@ export class CartLocators {
   }
 
   /**
-   * Locator for the product title displayed on the PDP.
+   * Locator for the product title.
    */
   get productTitle(): Locator {
-    return this.page.locator('h1.ui-pdp-title');
+    return this.page.getByRole('heading', { level: 1 });
   }
 
   /**
-   * Locator for the product price displayed on the PDP.
+   * Locator for the product price.
    */
   get productPrice(): Locator {
-    return this.page.locator('.ui-pdp-price__second-line [data-testid="price-part"]');
+    return this.page.getByTestId('price-part');
   }
 }
