@@ -1,4 +1,4 @@
-import { test } from '../../fixtures/testFixtures';
+import { test } from '../../fixtures/testFixtures.js';
 
 test.describe('MercadoLibre - Login', () => {
   test('should display an error message when an invalid username is submitted', async ({

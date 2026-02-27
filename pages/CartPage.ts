@@ -1,6 +1,8 @@
-import { Page, expect } from '@playwright/test';
-import { BasePage } from './BasePage';
-import { CartLocators } from './locators/cart.locators';
+import playwright from '@playwright/test';
+const { expect } = playwright;
+import type { Page } from '@playwright/test';
+import { BasePage } from './BasePage.js';
+import { CartLocators } from './locators/cart.locators.js';
 
 /**
  * CartPage represents the Cart Page in MercadoLibre.

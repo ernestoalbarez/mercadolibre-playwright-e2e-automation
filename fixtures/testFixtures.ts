@@ -1,4 +1,5 @@
-import { test as base } from '@playwright/test';
+import playwright from '@playwright/test';
+const { test: base, expect } = playwright;
 import { HomePage } from '../pages/HomePage.js';
 import { SearchResultsPage } from '../pages/SearchResultsPage.js';
 import { PdpPage } from '../pages/PdpPage.js';
@@ -71,4 +72,4 @@ export const test = base.extend<PagesFixture>({
   },
 });
 
-export { expect } from '@playwright/test';
+export { expect };

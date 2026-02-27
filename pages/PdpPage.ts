@@ -1,4 +1,6 @@
-import { Page, expect } from '@playwright/test';
+import playwright from '@playwright/test';
+const { expect } = playwright;
+import type { Page } from '@playwright/test';
 import { BasePage } from './BasePage.js';
 import { PdpLocators } from './locators/pdp.locators.js';
 

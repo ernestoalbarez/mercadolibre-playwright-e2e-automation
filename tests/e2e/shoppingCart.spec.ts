@@ -1,4 +1,4 @@
-import { test } from '../../fixtures/testFixtures';
+import { test } from '../../fixtures/testFixtures.js';
 
 /**
  * E2E test covering the main shopping flow in MercadoLibre:

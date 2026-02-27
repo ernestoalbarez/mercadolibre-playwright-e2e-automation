@@ -1,6 +1,6 @@
-import { Page } from '@playwright/test';
-import { BasePage } from './BasePage';
-import { HomeLocators } from './locators/home.locators';
+import type { Page } from '@playwright/test';
+import { BasePage } from './BasePage.js';
+import { HomeLocators } from './locators/home.locators.js';
 
 /**
  * HomePage represents the MercadoLibre home page.

@@ -1,6 +1,8 @@
-import { Page, expect } from '@playwright/test';
-import { BasePage } from './BasePage';
-import { LoginLocators } from './locators/login.locators';
+import playwright from '@playwright/test';
+const { expect } = playwright;
+import type { Page } from '@playwright/test';
+import { BasePage } from './BasePage.js';
+import { LoginLocators } from './locators/login.locators.js';
 
 export class LoginPage extends BasePage {
   private readonly locators: LoginLocators;

@@ -1,4 +1,4 @@
-import { test } from '../../fixtures/testFixtures';
+import { test } from '../../fixtures/testFixtures.js';
 
 test.describe('PDP | Product Variants', () => {
   test('should update URL when selecting different product variants', async ({

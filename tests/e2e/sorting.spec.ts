@@ -1,4 +1,4 @@
-import { test } from '../../fixtures/testFixtures';
+import { test } from '../../fixtures/testFixtures.js';
 
 test.describe('MercadoLibre - Sorting Search Results', () => {
   const variations = [

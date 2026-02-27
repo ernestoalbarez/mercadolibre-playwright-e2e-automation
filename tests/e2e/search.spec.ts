@@ -1,4 +1,4 @@
-import { test } from '../../fixtures/testFixtures';
+import { test } from '../../fixtures/testFixtures.js';
 
 test.describe('MercadoLibre - Search flow', () => {
   test('should search for a product and show results', async ({ homePage, searchResultsPage }) => {

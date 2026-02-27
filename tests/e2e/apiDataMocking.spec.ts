@@ -1,6 +1,6 @@
-import { test } from '../../fixtures/testFixtures';
-import mockSearch from '../mocks/search.mock.json';
-import { buildSearchHtmlFromMock } from '../../utils/mockData';
+import { test } from '../../fixtures/testFixtures.js';
+import mockSearch from '../mocks/search.mock.json' with { type: 'json' };
+import { buildSearchHtmlFromMock } from '../../utils/mockData.js';
 
 test('should render mocked search results', async ({ page, homePage, searchResultsPage }) => {
   const mockedSearchHtml = buildSearchHtmlFromMock(mockSearch, 3);
