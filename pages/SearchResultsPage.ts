@@ -1,6 +1,6 @@
 import { Page, expect } from '@playwright/test';
-import { BasePage } from './BasePage';
-import { SearchResultsLocators, SortOption } from './locators/searchresults.locators';
+import { BasePage } from './BasePage.js';
+import { SearchResultsLocators, SortOption } from './locators/searchresults.locators.js';
 
 export class SearchResultsPage extends BasePage {
   private readonly locators: SearchResultsLocators;
@@ -41,10 +41,15 @@ export class SearchResultsPage extends BasePage {
   async selectSortBy(optionKey: SortOption): Promise<void> {
     await super.handleThirdPartyOverlays();
     await this.locators.sortByDropdown.click();
+    // Ensure Google One Tap overlay is hidden before interacting with the option
+    await this.page.locator('#credential_picker_container').waitFor({ state: 'hidden' });
 
     const option = this.locators.getSortOption(optionKey);
-    await option.waitFor({ state: 'visible' });
+    await option.waitFor({ state: 'visible', timeout: 30000 });
+
     await option.click();
+    // Wait for page load after sorting change
+    await this.page.waitForLoadState('load');
   }
 
   /**

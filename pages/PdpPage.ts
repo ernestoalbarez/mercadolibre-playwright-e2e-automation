@@ -1,6 +1,6 @@
 import { Page, expect } from '@playwright/test';
-import { BasePage } from './BasePage';
-import { PdpLocators } from './locators/pdp.locators';
+import { BasePage } from './BasePage.js';
+import { PdpLocators } from './locators/pdp.locators.js';
 
 /**
  * PdpPage models the Product Detail Page (PDP) of MercadoLibre.
@@ -155,10 +155,14 @@ export class PdpPage extends BasePage {
   async selectVariant(option: import('@playwright/test').Locator): Promise<void> {
     const currentUrl = this.page.url();
     await this.handleThirdPartyOverlays();
+    // Ensure Google One Tap overlay is hidden before interacting with variant option
+    await this.page.locator('#credential_picker_container').waitFor({ state: 'hidden' });
     await option.click();
+    // Wait for navigation URL change (already with timeout) and ensure page load completes
+    await this.page.waitForLoadState('load');
 
     // MercadoLibre performs a full page load on variant change
-    await this.page.waitForURL((url) => url.toString() !== currentUrl);
+    await this.page.waitForURL((url) => url.toString() !== currentUrl, { timeout: 30000 });
   }
 
   /**

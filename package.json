@@ -1,6 +1,7 @@
 {
   "name": "mercadolibre-playwright-e2e-automation",
   "version": "0.1.0",
+  "type": "module",
   "description": "End-to-end automation framework for MercadoLibre Argentina using Playwright and TypeScript.",
   "scripts": {
     "test": "playwright test",
@@ -34,6 +35,7 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-define-config": "^2.1.0",
     "eslint-plugin-playwright": "^2.5.0",
+    "globals": "^17.3.0",
     "husky": "^8.0.0",
     "lint-staged": "^16.2.7",
     "prettier": "^3.8.0"

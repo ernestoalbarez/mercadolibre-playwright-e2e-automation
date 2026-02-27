@@ -21,6 +21,11 @@ export abstract class BasePage {
     if (await googleOneTapIframe.isVisible({ timeout: 2000 }).catch(() => false)) {
       // Attempt to dismiss overlay gracefully
       await this.page.keyboard.press('Escape').catch(() => {});
+      // Wait for the container to be hidden
+      await this.page
+        .locator('#credential_picker_container')
+        .waitFor({ state: 'hidden', timeout: 5000 })
+        .catch(() => {});
       await googleOneTapIframe.waitFor({ state: 'hidden', timeout: 5000 }).catch(() => {});
     }
   }

@@ -1,9 +1,10 @@
 import { test as base } from '@playwright/test';
-import { HomePage } from '../pages/HomePage';
-import { SearchResultsPage } from '../pages/SearchResultsPage';
-import { PdpPage } from '../pages/PdpPage';
-import { CartPage } from '../pages/CartPage';
-import { LoginPage } from '../pages/LoginPage';
+import { HomePage } from '../pages/HomePage.js';
+import { SearchResultsPage } from '../pages/SearchResultsPage.js';
+import { PdpPage } from '../pages/PdpPage.js';
+import { CartPage } from '../pages/CartPage.js';
+import { LoginPage } from '../pages/LoginPage.js';
+// Fixture extending the base Playwright test to include custom page objects
 
 type PagesFixture = {
   homePage: HomePage;
@@ -15,15 +16,39 @@ type PagesFixture = {
 
 export const test = base.extend<PagesFixture>({
   page: async ({ page }, use) => {
-    // Block Google One Tap / Sign-in as it often overlays and intercepts clicks in production
-    // We use a "soft block" (fulfill with empty response) to avoid browser stalls (especially in Webkit)
-    await page.route('**://accounts.google.com/gsi/**', (route) =>
-      route.fulfill({
-        status: 200,
-        contentType: 'text/javascript',
-        body: '// Soft-blocked by QA Automation',
-      })
-    );
+    // Neutralize Google One Tap / Sign-in as it often overlays and intercepts clicks in production
+    // We use "Visual Neutralization" via CSS instead of network blocking to avoid browser stalls
+    await page.addInitScript(() => {
+      const style = document.createElement('style');
+      style.innerHTML = `
+    #credential_picker_container,
+    iframe[src*="accounts.google.com/gsi"] {
+      display: none !important;
+      visibility: hidden !important;
+      pointer-events: none !important;
+    }
+  `;
+      document.head.appendChild(style);
+    });
+    // Increase default timeouts for slower browsers (e.g., Webkit)
+    page.setDefaultTimeout(60000);
+    page.setDefaultNavigationTimeout(60000);
+    // Re-apply neutralization on each navigation load
+    page.on('load', async () => {
+      await page.evaluate(() => {
+        const style = document.createElement('style');
+        style.innerHTML = `
+      #credential_picker_container,
+      iframe[src*="accounts.google.com/gsi"] {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+      }`;
+        document.head.appendChild(style);
+      });
+    });
+    // Ensure the overlay is hidden before proceeding with tests
+    await page.locator('#credential_picker_container').waitFor({ state: 'hidden' });
     await use(page);
   },
   homePage: async ({ page }, use) => {
@@ -31,6 +56,7 @@ export const test = base.extend<PagesFixture>({
     await homePage.open();
     await use(homePage);
   },
+
   searchResultsPage: async ({ page }, use) => {
     await use(new SearchResultsPage(page));
   },

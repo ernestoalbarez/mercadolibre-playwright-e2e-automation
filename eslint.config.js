@@ -1,24 +1,23 @@
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
 import playwrightPlugin from 'eslint-plugin-playwright';
+import globals from 'globals';
 
 export default [
   {
     ignores: ['node_modules/**', 'dist/**', 'playwright-report/**', 'test-results/**'],
   },
   {
-    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+    files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
-        ecmaVersion: 2020,
+        ecmaVersion: 'latest',
         sourceType: 'module',
       },
       globals: {
-        process: 'readonly',
-        __dirname: 'readonly',
-        module: 'readonly',
-        console: 'readonly',
+        ...globals.browser,
+        ...globals.node,
       },
     },
     plugins: {
@@ -34,7 +33,8 @@ export default [
       'playwright/no-skipped-test': 'warn',
       'no-undef': 'error',
       'playwright/expect-expect': 'off',
-      'jest/expect-expect': 'off',
+      // Playwright specific browser globals handling is better done via globals.browser
+      // but if 'document' is still flagged in test files, we can be explicit here
     },
   },
 ];
