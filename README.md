@@ -1,3 +1,18 @@
+![E2E Tests](https://github.com/ernestoalbarez/playwright-ts-framework-skeleton/actions/workflows/playwright.yml/badge.svg)
+![Node](https://img.shields.io/badge/node-18+-339933?logo=node.js&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-strict-3178C6?logo=typescript&logoColor=white)
+![Playwright](https://img.shields.io/badge/playwright-e2e-45ba63?logo=playwright&logoColor=white)
+![Tests](https://img.shields.io/badge/tests-playwright-2EAD33?logo=playwright&logoColor=white)
+![Lint](https://img.shields.io/badge/lint-eslint%20v9-4B32C3?logo=eslint&logoColor=white)
+![Format](https://img.shields.io/badge/code%20style-prettier-F7B93E?logo=prettier&logoColor=black)
+![Git Hooks](https://img.shields.io/badge/git%20hooks-husky-000000?logo=git)
+![Commit Quality](https://img.shields.io/badge/lint--staged-enabled-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Status](https://img.shields.io/badge/status-active-success)
+![Coverage](https://img.shields.io/badge/coverage-90%25-brightgreen)
+![Reports](https://img.shields.io/badge/reports-allure-purple)
+
+
 # MercadoLibre Playwright E2E Automation Framework
 
 End-to-end automation framework for **MercadoLibre Argentina** built with **Playwright** and **TypeScript**.
